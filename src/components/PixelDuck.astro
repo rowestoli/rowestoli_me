@@ -1,0 +1,175 @@
+---
+/**
+ * Pixel-art mallard on a 64×56 grid. Its pupils follow the cursor (src/scripts/duck.ts).
+ * The art is generated from simple shapes, so it's easy to tweak sizes and colors here.
+ *  - variant "full": head and chest (hero, 404)
+ *  - variant "head": just the head (nav)
+ */
+interface Props {
+  variant?: 'full' | 'head';
+  class?: string;
+  label?: string;
+  interactive?: boolean;
+}
+const { variant = 'full', class: className = '', label = '', interactive = false } = Astro.props;
+
+const W = 64;
+const H = 56;
+
+const C: Record<string, string> = {
+  outline: '#1A1A1A',
+  head: '#2D5A3D',
+  headLo: '#1D3A28',
+  sheen: '#5B9A6E',
+  sheenHi: '#8CC09C',
+  ring: '#FAFAFA',
+  chest: '#8B5A2B',
+  chestHi: '#A67B4B',
+  chestLo: '#6B4A1B',
+  bill: '#F2C14E',
+  billLo: '#D9A031',
+  white: '#FFFFFF',
+};
+
+const inE = (x: number, y: number, cx: number, cy: number, rx: number, ry: number) =>
+  ((x + 0.5 - cx) / rx) ** 2 + ((y + 0.5 - cy) / ry) ** 2 <= 1;
+
+// Eyes: round whites, centered here (grid coords)
+const EYES = [
+  { cx: 21, cy: 20 },
+  { cx: 43, cy: 20 },
+];
+const EYE_R = 5.6;
+const isEye = (x: number, y: number) => EYES.some((e) => inE(x, y, e.cx, e.cy, EYE_R, EYE_R));
+
+function pixel(x: number, y: number): string | null {
+  let c: string | null = null;
+  // Chest (cut off by the waterline)
+  if (y <= 55 && inE(x, y, 32, 64, 25, 22)) {
+    c = 'chest';
+    if (inE(x, y, 23, 52, 8, 5)) c = 'chestHi';
+    else if (x > 43 && y > 48) c = 'chestLo';
+  }
+  // Neck and white collar
+  if (x >= 20 && x <= 43 && y >= 30 && y <= 44 && (!c || y < 43)) c = y >= 39 && y <= 41 ? 'ring' : 'head';
+  // Head
+  if (inE(x, y, 32, 22, 21, 19)) {
+    c = 'head';
+    if (inE(x, y, 21, 11, 7, 4.5)) c = inE(x, y, 19, 10, 3, 1.8) ? 'sheenHi' : 'sheen';
+    else if (inE(x, y, 44, 31, 12, 8) && y > 26) c = 'headLo';
+  }
+  // Bill
+  if (inE(x, y, 32, 33, 11, 6)) c = y >= 34 ? 'billLo' : 'bill';
+  if ((x === 27 || x === 28 || x === 35 || x === 36) && y === 31) c = 'outline';
+  if (isEye(x, y)) c = 'white';
+  return c;
+}
+
+const fill: (string | null)[][] = Array.from({ length: H }, (_, y) => Array.from({ length: W }, (_, x) => pixel(x, y)));
+const grid: (string | null)[][] = fill.map((row) => row.slice());
+for (let y = 0; y < H; y++)
+  for (let x = 0; x < W; x++) {
+    if (fill[y][x]) continue;
+    const n = [fill[y - 1]?.[x], fill[y + 1]?.[x], fill[y]?.[x - 1], fill[y]?.[x + 1]];
+    if (n.some(Boolean)) grid[y][x] = 'outline';
+  }
+// Eye rims
+for (let y = 0; y < H; y++)
+  for (let x = 0; x < W; x++) {
+    if (!isEye(x, y)) continue;
+    for (const [nx, ny] of [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]])
+      if (!isEye(nx, ny) && grid[ny]?.[nx] && grid[ny][nx] !== 'outline') grid[ny][nx] = 'outline';
+  }
+
+const rects: { x: number; y: number; w: number; fill: string }[] = [];
+for (let y = 0; y < H; y++) {
+  let x = 0;
+  while (x < W) {
+    const c = grid[y][x];
+    if (!c) { x++; continue; }
+    let w = 1;
+    while (x + w < W && grid[y][x + w] === c) w++;
+    rects.push({ x, y, w, fill: C[c] });
+    x += w;
+  }
+}
+
+// Eyelid pixels (for blinking) = the eye-white pixels painted head green
+const lids: { x: number; y: number; w: number }[] = [];
+for (let y = 0; y < H; y++) {
+  let x = 0;
+  while (x < W) {
+    if (!isEye(x, y)) { x++; continue; }
+    let w = 1;
+    while (x + w < W && isEye(x + w, y)) w++;
+    lids.push({ x, y, w });
+    x += w;
+  }
+}
+
+const viewBox = variant === 'full' ? `0 0 ${W} ${H}` : `9 0 46 46`;
+const a11y = interactive
+  ? { role: 'button', tabindex: 0, 'aria-label': `${label || 'Pixel-art duck'}. Press to quack.` }
+  : label
+    ? { role: 'img', 'aria-label': label }
+    : { 'aria-hidden': 'true' };
+---
+
+<div class:list={['duck', `duck--${variant}`, interactive && 'duck--interactive', className]} data-duck {...a11y}>
+  <svg viewBox={viewBox} shape-rendering="crispEdges" aria-hidden="true" focusable="false">
+    {rects.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.fill} />)}
+    <g class="duck__pupils" data-pupils>
+      {EYES.map((e) => (
+        <g transform={`translate(${Math.floor(e.cx) - 2} ${Math.floor(e.cy) - 2})`}>
+          <rect x="1" y="0" width="2" height="1" fill={C.outline} />
+          <rect x="0" y="1" width="4" height="2" fill={C.outline} />
+          <rect x="1" y="3" width="2" height="1" fill={C.outline} />
+          <rect x="1" y="1" width="1" height="1" fill={C.white} />
+        </g>
+      ))}
+    </g>
+    <g class="duck__lids">
+      {lids.map((l) => <rect x={l.x} y={l.y} width={l.w} height="1" fill={C.head} />)}
+    </g>
+  </svg>
+  {interactive && <span class="duck__bubble" aria-live="polite" data-bubble></span>}
+</div>
+
+<style>
+  .duck { position: relative; display: block; line-height: 0; }
+  .duck svg { width: 100%; height: auto; display: block; }
+  .duck__pupils { transition: transform 70ms linear; }
+  .duck__lids { opacity: 0; }
+  .duck.is-blinking .duck__lids { opacity: 1; }
+
+  .duck--interactive { cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .duck--interactive:focus-visible { outline: 2px solid var(--blaze); outline-offset: 6px; }
+  .duck--interactive.is-quacking svg { animation: duck-bob 360ms steps(3, end); }
+
+  .duck__bubble {
+    position: absolute;
+    left: 70%;
+    bottom: 92%;
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.95rem;
+    line-height: 1;
+    color: #1a1a1a;
+    background: #fff;
+    border: 2px solid #1a1a1a;
+    padding: 0.45em 0.65em;
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .duck__bubble.is-on { opacity: 1; transform: none; transition: transform 160ms steps(2, end); }
+
+  @keyframes duck-bob {
+    0%, 100% { transform: none; }
+    50% { transform: translateY(-6%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .duck--interactive.is-quacking svg { animation: none; }
+    .duck__pupils { transition: none; }
+  }
+</style>

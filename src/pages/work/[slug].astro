@@ -1,0 +1,97 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Placeholder from '../../components/Placeholder.astro';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((p, i) => ({
+    params: { slug: p.id },
+    props: { project: p, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+const { project, next } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+
+const linkDefs = [
+  { key: 'demo', label: 'Try the live demo', primary: true },
+  { key: 'appStore', label: 'Get it on the App Store', primary: true },
+  { key: 'site', label: 'Visit the website', primary: false },
+  { key: 'repo', label: 'View the code', primary: false },
+] as const;
+const links = linkDefs.filter((l) => d.links[l.key]);
+const hasDemo = Boolean(d.links.demo || d.links.appStore);
+---
+
+<Base title={d.title} description={d.summary}>
+  <article class="wrap case">
+    <a class="back" href="/work">All work</a>
+
+    <header class="case__head rise">
+      <p class="status" data-live={d.status.startsWith('Live') ? '' : undefined}>{d.status}</p>
+      <h1 class="case__title" transition:name={`title-${project.id}`}>{d.title}</h1>
+      <p class="lede">{d.summary}</p>
+      {d.origin && <p class="case__origin">{d.origin}</p>}
+      <div class="case__links">
+        {links.map((l) => (
+          <a class:list={['btn', !l.primary && 'btn--ghost']} href={d.links[l.key]}>{l.label}</a>
+        ))}
+        {!hasDemo && <span class="btn btn--ghost" aria-disabled="true">Live demo coming soon</span>}
+      </div>
+    </header>
+
+    <dl class="facts">
+      <div><dt>My role</dt><dd>{d.role}</dd></div>
+      <div><dt>When</dt><dd>{d.timeline}</dd></div>
+      <div class="facts__stack"><dt>Built with</dt><dd><ul class="tags">{d.stack.map((s) => <li>{s}</li>)}</ul></dd></div>
+    </dl>
+
+    <Placeholder class="case__cover rise" label={d.coverLabel} ratio="16 / 8" />
+
+    <div class="prose case__body">
+      <Content />
+    </div>
+
+    <nav class="next" aria-label="Next project">
+      <a href={`/work/${next.id}`}>
+        <span class="muted">Next project</span>
+        <span class="next__title">{next.data.title}</span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .case { padding-block: clamp(2rem, 6vw, 4rem) clamp(4rem, 10vw, 7rem); }
+  .back { display: inline-block; margin-bottom: 2.5rem; color: var(--mist); text-decoration: none; }
+  .back::before { content: '←'; display: inline-block; margin-right: 0.5rem; transition: transform 200ms var(--ease); }
+  .back:hover::before { transform: translateX(-4px); }
+
+  .case__head { display: grid; gap: 1.25rem; max-width: 48rem; }
+  .case__title { font-size: clamp(2.4rem, 6vw, 4.5rem); line-height: 1.02; letter-spacing: -0.055em; }
+  .case__origin { font-size: var(--step--1); color: var(--reed); }
+  .case__links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem; }
+
+  .facts {
+    display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 1.5rem;
+    margin: clamp(2.5rem, 6vw, 4rem) 0 2rem; padding: 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .facts dt { font-size: var(--step--1); color: var(--mist); margin-bottom: 0.35rem; }
+  .facts dd { margin: 0; font-weight: 700; font-size: 0.9375rem; }
+
+  .case__body { margin-top: clamp(2.5rem, 6vw, 4rem); }
+
+  .next { margin-top: clamp(4rem, 10vw, 6rem); border-top: 1px solid var(--line); }
+  .next a { display: grid; gap: 0.3rem; padding-top: 2rem; text-decoration: none; }
+  .next__title { font-size: var(--step-3); font-weight: 700; letter-spacing: -0.04em; transition: color 160ms; }
+  .next a:hover .next__title { color: var(--blaze-dk); }
+
+  @media (max-width: 720px) {
+    .facts { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import PixelDuck from './PixelDuck.astro';
+import { site } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/work', label: 'Work' },
+  { href: '/personal', label: 'Personal' },
+];
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="nav" transition:persist="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="/" aria-label={`${site.name}, home`}>
+      <PixelDuck variant="head" class="nav__duck" />
+      <span>Rowe Stodolnic</span>
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav__links">
+        <li class="nav__indicator" data-indicator aria-hidden="true"></li>
+        {links.map((l) => (
+          <li>
+            <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined} data-nav-link>
+              {l.label}
+            </a>
+          </li>
+        ))}
+        <li><a class="nav__cta" href="/#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // The header persists across page changes, so update the active link by hand.
+  document.addEventListener('astro:page-load', () => {
+    const path = location.pathname.replace(/\/$/, '') || '/';
+    let current: HTMLAnchorElement | null = null;
+    document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((a) => {
+      const href = a.getAttribute('href') || '/';
+      const active = href === '/' ? path === '/' : path.startsWith(href);
+      if (active) {
+        a.setAttribute('aria-current', 'page');
+        current = a;
+      } else a.removeAttribute('aria-current');
+    });
+    moveIndicator(current);
+  });
+
+  // A single underline that glides to the current page's link
+  function moveIndicator(link: HTMLAnchorElement | null) {
+    const bar = document.querySelector<HTMLElement>('[data-indicator]');
+    if (!bar) return;
+    if (!link) {
+      bar.style.opacity = '0';
+      return;
+    }
+    const parent = bar.parentElement!.getBoundingClientRect();
+    const r = link.getBoundingClientRect();
+    bar.style.opacity = '1';
+    bar.style.width = `${r.width - 12}px`;
+    bar.style.transform = `translateX(${r.left - parent.left + 6}px)`;
+    requestAnimationFrame(() => bar.classList.add('is-ready'));
+  }
+  window.addEventListener('resize', () => moveIndicator(document.querySelector('[data-nav-link][aria-current="page"]')));
+</script>
+
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgb(18 22 20 / 0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 4rem; }
+  .nav__brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; font-weight: 700; font-size: 1rem; letter-spacing: -0.03em; }
+  .nav__brand:hover { color: var(--ink); }
+  :global(.nav__duck) { width: 34px; }
+  .nav__links { position: relative; display: flex; align-items: center; gap: clamp(0.25rem, 2vw, 1.5rem); list-style: none; margin: 0; padding: 0; }
+  .nav__indicator {
+    position: absolute; left: 0; bottom: -2px; height: 2px; width: 0;
+    background: var(--blaze); border-radius: 2px; opacity: 0; pointer-events: none;
+  }
+  .nav__indicator:global(.is-ready) { transition: transform 500ms var(--ease-out), width 500ms var(--ease-out), opacity 200ms; }
+  .nav__links a { position: relative; text-decoration: none; padding: 0.4rem 0.3rem; color: var(--mist); font-size: 0.9375rem; }
+  .nav__links a:hover, .nav__links a[aria-current='page'] { color: var(--ink); }
+  .nav__cta { color: var(--ink) !important; border: 1.5px solid var(--ink); border-radius: 999px; padding: 0.35rem 0.9rem !important; }
+  .nav__cta:hover { background: var(--ink); color: var(--on-ink) !important; }
+  @media (max-width: 560px) {
+    .nav__brand span { display: none; }
+    .nav__cta { display: none; }
+  }
+</style>

@@ -1,0 +1,108 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { categoryLabels } from '../data/site';
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  index?: number;
+}
+const { project, index = 0 } = Astro.props;
+const d = project.data;
+const live = d.status.startsWith('Live');
+---
+
+<li
+  class:list={['card', 'rise', d.wide && 'card--wide']}
+  data-category={d.category}
+  style={`--i: ${index}; view-transition-name: card-${project.id}`}
+>
+  <a href={`/work/${project.id}`} class="card__link">
+    <div class:list={['card__preview', d.phones && 'card__preview--phones']} data-tilt>
+      {d.phones
+        ? Array.from({ length: d.phones }, (_, i) => (
+            <Placeholder label={`${d.title} screen ${i + 1} here`} ratio="9 / 19" />
+          ))
+        : <Placeholder label={d.coverLabel} />}
+    </div>
+    <div class="card__body">
+      <div class="card__meta">
+        <span class="card__cat">{categoryLabels[d.category]}</span>
+        <span class="status" data-live={live ? '' : undefined}>{d.status}</span>
+      </div>
+      <h3 class="card__title" transition:name={`title-${project.id}`}>{d.title}</h3>
+      <p class="card__summary">{d.summary}</p>
+    </div>
+  </a>
+</li>
+
+<style>
+  .card { list-style: none; grid-column: span 2; min-width: 0; }
+  .card--wide { grid-column: span 4; }
+  .card[hidden] { display: none; }
+
+  .card__link { display: grid; gap: 1rem; align-content: start; text-decoration: none; color: inherit; }
+  .card__link:hover { color: inherit; }
+
+  /* Every preview in a row shares one height, so wide and narrow cards line up.
+     On hover the preview tilts toward the cursor and catches a soft highlight (interactions.ts). */
+  .card__preview {
+    --rx: 0deg; --ry: 0deg; --lift: 0px; --mx: 50%; --my: 50%;
+    position: relative;
+    height: clamp(200px, 21vw, 290px);
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--tint);
+    transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(var(--lift));
+    transition: transform 600ms var(--ease-out), box-shadow 400ms var(--ease-out);
+  }
+  .card__preview.is-tilting { transition: transform 120ms linear, box-shadow 400ms var(--ease-out); }
+  .card__preview::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(420px circle at var(--mx) var(--my), rgb(255 255 255 / 0.09), transparent 45%);
+    opacity: 0; transition: opacity 300ms;
+  }
+  .card__preview :global(.ph) { border-radius: 0; transition: transform 700ms var(--ease-out); }
+  .card__preview:not(.card__preview--phones) :global(.ph) { aspect-ratio: auto !important; height: 100%; }
+  .card__preview--phones {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.5rem, 2vw, 1.25rem);
+    padding: clamp(1rem, 3vw, 1.75rem) clamp(1rem, 4vw, 3rem) 0;
+    background: var(--mint);
+    align-items: start;
+  }
+  .card__preview--phones :global(.ph) { border-radius: 16px; background: var(--white); }
+  .card__preview--phones :global(.ph:nth-child(2)) { margin-top: -0.6rem; }
+
+  .card__link:hover .card__preview,
+  .card__link:focus-visible .card__preview {
+    --lift: -6px;
+    box-shadow: 0 22px 44px -20px var(--shadow);
+  }
+  .card__link:hover .card__preview::after { opacity: 1; }
+  .card__link:hover .card__preview:not(.card__preview--phones) :global(.ph) { transform: scale(1.04); }
+  .card__link:hover .card__preview--phones :global(.ph) { transform: translateY(-8px); }
+  .card__link:hover .card__preview--phones :global(.ph:nth-child(2)) { transform: translateY(-14px); transition-delay: 40ms; }
+  .card__link:hover .card__preview--phones :global(.ph:nth-child(3)) { transition-delay: 80ms; }
+
+  .card__body { display: grid; gap: 0.45rem; }
+  .card__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.9rem; }
+  .card__cat {
+    font-size: var(--step--1); font-weight: 700; color: var(--forest);
+    background: var(--mint); padding: 0.05rem 0.6rem; border-radius: 999px;
+  }
+  .card__title { font-size: var(--step-1); width: fit-content; background: linear-gradient(var(--blaze), var(--blaze)) left bottom / 0 2px no-repeat; transition: background-size 400ms var(--ease-out); }
+  .card__link:hover .card__title { background-size: 100% 2px; }
+  .card__summary {
+    color: var(--ink-2); font-size: 0.9375rem; line-height: 1.6;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .card--wide .card__title { font-size: var(--step-2); }
+
+  @media (max-width: 860px) {
+    .card, .card--wide { grid-column: span 6; }
+  }
+  @media (min-width: 861px) and (max-width: 1060px) {
+    .card { grid-column: span 3; }
+    .card--wide { grid-column: span 6; }
+  }
+</style>

@@ -1,0 +1,35 @@
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
+
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    // Used for the filter chips and the tag on each card
+    category: z.enum(['app', 'ai', 'web', 'design']),
+    status: z.string(),
+    role: z.string(),
+    timeline: z.string(),
+    stack: z.array(z.string()),
+    origin: z.string().optional(),
+    featured: z.boolean().default(false),
+    // Wide cards span two columns on the work grid
+    wide: z.boolean().default(false),
+    // Show this many phone-shaped previews instead of one wide preview
+    phones: z.number().optional(),
+    order: z.number().default(99),
+    coverLabel: z.string(),
+    links: z
+      .object({
+        demo: z.string().optional(),
+        repo: z.string().optional(),
+        appStore: z.string().optional(),
+        site: z.string().optional(),
+      })
+      .default({}),
+  }),
+});
+
+export const collections = { projects };

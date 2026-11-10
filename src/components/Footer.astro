@@ -1,0 +1,18 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <p>© {year} {site.name}</p>
+    <p class="muted">
+      Built with Astro. <a href={site.sourceRepo}>Read the source on GitHub</a>.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .foot { border-top: 1px solid var(--line); padding-block: 2rem; font-size: var(--step--1); }
+  .foot__inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; }
+</style>

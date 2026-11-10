@@ -1,0 +1,172 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PixelDuck from '../components/PixelDuck.astro';
+import Placeholder from '../components/Placeholder.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { site, experience } from '../data/site';
+
+const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featured = all.filter((p) => p.data.featured);
+---
+
+<Base>
+  <section class="wrap hero">
+    <div class="hero__copy">
+      <h1 class="hero__name" aria-label="Rowe Stodolnic">
+        <span class="line" aria-hidden="true"><span>Rowe</span></span>
+        <span class="line" aria-hidden="true"><span>Stodolnic</span></span>
+      </h1>
+      <p class="lede rise" style="--d: 350ms">
+        I work where product, program management and engineering meet. I built QuackLog, an iOS app for duck hunters,
+        from the first sketch to the App Store.
+      </p>
+      <div class="hero__actions rise" style="--d: 450ms">
+        <a class="btn" href="/work">See my work</a>
+        <a class="btn btn--ghost" href="#contact">Get in touch</a>
+      </div>
+      <p class="hero__meta muted rise" style="--d: 550ms">Brown University, Class of 2027. Computer Science and Business Economics. San Francisco Bay Area.</p>
+    </div>
+    <div class="hero__tile">
+      <PixelDuck interactive label="Pixel-art mallard. Its eyes follow your cursor" class="hero__duck" />
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="selected">
+    <div class="section__head">
+      <h2 id="selected">Selected work</h2>
+      <p class="muted">Two apps, an AI system I'm building, and a Go engine you can play.</p>
+    </div>
+    <ul class="grid">
+      {featured.map((p, i) => <ProjectCard project={p} index={i} />)}
+    </ul>
+    <p class="more"><a href="/work">See all {all.length} projects</a></p>
+  </section>
+
+  <section class="section wrap about" aria-labelledby="about">
+    <Placeholder class="about__photo" label="Headshot here" ratio="4 / 5" />
+    <div class="about__copy">
+      <h2 id="about">About me</h2>
+      <!-- Draft copy: edit to taste -->
+      <p class="lede">
+        I'm a senior at Brown studying Computer Science and Business Economics. I like the whole arc of a product:
+        finding out what people actually need, deciding what to build first, and then building it.
+      </p>
+      <p>
+        This past year I worked on security programs at Okta, built reporting and tooling at Kindred Motorworks, and
+        shipped my first app on my own. I'm looking for product and program management roles where I can stay close to
+        the engineering.
+      </p>
+      <p>
+        Off the screen, I play flanker for Brown's First XV and photograph cars.{' '}
+        <a href="/personal">More about life outside work</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="experience">
+    <div class="section__head">
+      <h2 id="experience">Experience</h2>
+    </div>
+    <ol class="timeline">
+      {experience.map((job) => (
+        <li class="job">
+          <div class="job__when muted">{job.when}</div>
+          <div class="job__body">
+            <h3>{job.role}, <span class="job__co">{job.company}</span></h3>
+            <p class="muted job__place">{job.place}</p>
+            <ul>{job.points.map((pt) => <li>{pt}</li>)}</ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section wrap contact" id="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h">Get in touch</h2>
+    <p class="lede">I'm looking for full-time product and program management roles starting after May 2027. The fastest way to reach me is email.</p>
+    <div class="hero__actions">
+      <a class="btn" href={`mailto:${site.email}`}>Email me</a>
+      <a class="btn btn--ghost" href={site.linkedin}>LinkedIn</a>
+      <a class="btn btn--ghost" href={site.github}>GitHub</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    align-items: center; gap: clamp(2rem, 6vw, 5rem);
+    padding-block: clamp(3.5rem, 10vw, 7rem);
+  }
+  .hero__copy { display: grid; gap: 1.4rem; justify-items: start; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .hero__meta { font-size: var(--step--1); max-width: 34rem; }
+
+  /* Name slides up line by line from behind a mask */
+  .line { display: block; overflow: hidden; padding-bottom: 0.06em; }
+  .line > span { display: inline-block; animation: line-up 900ms var(--ease-out) both; }
+  .line:nth-child(2) > span { animation-delay: 110ms; }
+  @keyframes line-up { from { transform: translateY(105%); } to { transform: none; } }
+
+  /* The duck pops up into its tile, then its eyes follow the cursor */
+  .hero__tile {
+    position: relative; justify-self: end;
+    width: min(100%, 320px); aspect-ratio: 1;
+    border-radius: 28px; background: #dfeae4;
+    animation: tile-in 700ms 200ms var(--ease-out) both;
+  }
+  .hero__tile :global(.hero__duck) {
+    position: absolute; left: 11%; right: 11%; bottom: 0;
+    animation: duck-up 800ms 550ms var(--ease-out) both;
+  }
+  @keyframes tile-in { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+  @keyframes duck-up { from { transform: translateY(40%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-flow: dense;
+    gap: clamp(2rem, 4vw, 3rem) clamp(1rem, 2.5vw, 2rem);
+    margin: 0; padding: 0;
+  }
+  .more { margin-top: 2.5rem; font-weight: 700; }
+
+  .about { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+  .about__copy { display: grid; gap: 1.1rem; max-width: 38rem; }
+
+  .timeline { list-style: none; margin: 0; padding: 0; max-width: 52rem; }
+  .job { position: relative; display: grid; grid-template-columns: 9rem 1fr; gap: 1.5rem; padding: 0 0 2.25rem; }
+  .job__when { font-size: var(--step--1); padding-top: 0.2rem; }
+  .job__body { position: relative; padding-left: 1.75rem; border-left: 1.5px solid var(--line); view-timeline-name: --job; }
+  .job__body::before {
+    content: ''; position: absolute; z-index: 1; left: -7.5px; top: 0.45rem;
+    width: 13px; height: 13px; border-radius: 50%;
+    background: var(--fern); border: 2px solid var(--fern); box-shadow: 0 0 0 4px var(--paper);
+  }
+  /* A green line that fills in as each role scrolls into view */
+  .job__body::after {
+    content: ''; position: absolute; left: -1.5px; top: 0; bottom: -2.25rem; width: 1.5px;
+    background: var(--fern); transform-origin: top;
+  }
+  .job:last-child .job__body::after { bottom: 0; }
+  @supports (animation-timeline: view()) {
+    .job__body::after { animation: draw linear both; animation-timeline: --job; animation-range: entry 30% cover 60%; }
+    .job__body::before { animation: dot linear both; animation-timeline: --job; animation-range: entry 30% entry 70%; }
+  }
+  @keyframes draw { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes dot { from { background: var(--white); transform: scale(0.7); } to { background: var(--fern); transform: scale(1); } }
+  .job__co { color: var(--forest); }
+  .job__place { font-size: var(--step--1); margin-top: 0.15rem; }
+  .job ul { margin: 0.75rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.4rem; color: var(--ink-2); font-size: 0.9375rem; }
+
+  .contact { display: grid; gap: 1.4rem; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; padding-top: 2.5rem; }
+    .hero__tile { justify-self: start; width: min(60%, 240px); grid-row: 1; }
+    .about { grid-template-columns: 1fr; }
+    .about__photo { max-width: 300px; }
+  }
+  @media (max-width: 560px) {
+    .job { grid-template-columns: 1fr; gap: 0.4rem; }
+  }
+</style>

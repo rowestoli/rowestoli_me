@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+
+const honors = [
+  { year: '2024', text: 'NCR Division I National Champions' },
+  { year: '2023 – 25', text: 'Ivy League and Liberty Conference Champions' },
+  { year: '2023 – 25', text: 'NCR Academic All-American' },
+  { year: '2023 – 25', text: 'Liberty Conference All-Star nominee' },
+  { year: '2025', text: 'All Conference' },
+];
+
+// Car photography: swap each label for an <img> once the photos are in /public/photos/cars
+const cars = [
+  { label: 'Car photo 1 here (landscape)', ratio: '3 / 2' },
+  { label: 'Car photo 2 here (portrait)', ratio: '4 / 5' },
+  { label: 'Car photo 3 here (landscape)', ratio: '3 / 2' },
+  { label: 'Car photo 4 here (portrait)', ratio: '4 / 5' },
+  { label: 'Car photo 5 here (landscape)', ratio: '16 / 9' },
+  { label: 'Car photo 6 here (square)', ratio: '1 / 1' },
+];
+
+const hobbies = [
+  { title: 'Building my PC', text: 'A custom build that now runs local AI models for my side projects.', label: 'PC build photo here' },
+  { title: 'Hobby title here', text: 'Placeholder: something you love doing and why.', label: 'Hobby photo here' },
+  { title: 'Hobby title here', text: 'Placeholder: another thing worth knowing about you.', label: 'Hobby photo here' },
+];
+---
+
+<Base title="Personal" description="Rugby, car photography and life outside work.">
+  <section class="wrap intro">
+    <h1>Off the clock</h1>
+    <p class="lede">Rugby taught me most of what I know about teams. The rest of my free time goes to cameras, cars and building things.</p>
+  </section>
+
+  <section class="section wrap rugby" aria-labelledby="rugby">
+    <div class="rugby__photo">
+      <Placeholder label="Rugby action shot here (wide)" ratio="16 / 10" />
+    </div>
+    <div class="rugby__copy">
+      <h2 id="rugby">Brown Rugby</h2>
+      <p>I play flanker for the Brown Men's Rugby First XV. Off the field I've served as recruitment chair and now social chair.</p>
+      <ul class="honors">
+        {honors.map((h) => (
+          <li><span class="muted">{h.year}</span><span>{h.text}</span></li>
+        ))}
+      </ul>
+    </div>
+    <div class="rugby__strip">
+      <Placeholder label="Rugby photo here" ratio="1 / 1" />
+      <Placeholder label="Team photo here" ratio="1 / 1" />
+      <Placeholder label="Rugby photo here" ratio="1 / 1" />
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="cars">
+    <div class="section__head">
+      <h2 id="cars">Car photography</h2>
+      <p class="muted">Select a photo to see it larger.</p>
+    </div>
+    <div class="gallery">
+      {cars.map((c) => (
+        <button class="gallery__item" type="button" data-lightbox aria-label={`Open ${c.label}`}>
+          <Placeholder label={c.label} ratio={c.ratio} />
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="else">
+    <div class="section__head">
+      <h2 id="else">Other things I'm into</h2>
+    </div>
+    <div class="hobbies">
+      {hobbies.map((h) => (
+        <article class="hobby">
+          <Placeholder label={h.label} ratio="4 / 3" />
+          <h3>{h.title}</h3>
+          <p class="muted">{h.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <dialog class="lightbox" data-lightbox-dialog aria-label="Photo viewer">
+    <div class="lightbox__frame" data-lightbox-frame></div>
+    <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">Close</button>
+  </dialog>
+</Base>
+
+<style>
+  .intro { display: grid; gap: 1.25rem; padding-block: clamp(3rem, 8vw, 5.5rem) 1rem; }
+
+  .rugby { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: start; }
+  .rugby__copy { display: grid; gap: 1.2rem; }
+  .rugby__strip { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .honors { list-style: none; margin: 0; padding: 0; }
+  .honors li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: 0.65rem 0; border-top: 1px solid var(--line); font-size: 0.9375rem; }
+
+  .gallery { columns: 3 260px; column-gap: 1rem; }
+  .gallery__item {
+    display: block; width: 100%; margin: 0 0 1rem; padding: 0; border: 0; background: none;
+    break-inside: avoid; cursor: zoom-in;
+    transition: transform 400ms var(--ease-out);
+  }
+  .gallery__item:hover { transform: translateY(-4px); }
+  .gallery__item :global(.ph) { transition: box-shadow 400ms var(--ease-out); }
+  .gallery__item:hover :global(.ph) { box-shadow: 0 22px 44px -20px var(--shadow); }
+
+  .hobbies { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 2rem); }
+  .hobby { display: grid; gap: 0.75rem; align-content: start; }
+
+  .lightbox {
+    width: min(92vw, 1100px); max-height: 90vh; padding: 0; border: 0; background: transparent; color: var(--ink);
+    overflow: visible;
+  }
+  .lightbox::backdrop { background: rgb(10 12 11 / 0.9); backdrop-filter: blur(6px); }
+  .lightbox[open] .lightbox__frame { animation: pop 260ms var(--ease); }
+  .lightbox__frame :global(.ph) { max-height: 82vh; }
+  .lightbox__close {
+    position: absolute; top: -2.75rem; right: 0;
+    font: inherit; font-weight: 700; color: var(--ink); background: var(--white); border: 1.5px solid var(--ink); border-radius: 999px;
+    padding: 0.35rem 0.9rem; cursor: pointer;
+  }
+  @keyframes pop { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 860px) {
+    .rugby, .hobbies { grid-template-columns: 1fr; }
+  }
+</style>
