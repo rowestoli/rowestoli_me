@@ -48,7 +48,9 @@ const hasDemo = Boolean(d.links.demo || d.links.appStore);
       <div class="facts__stack"><dt>Built with</dt><dd><ul class="tags">{d.stack.map((s) => <li>{s}</li>)}</ul></dd></div>
     </dl>
 
-    <Placeholder class="case__cover rise" label={d.coverLabel} ratio="16 / 8" />
+    {d.cover
+      ? <img class="case__cover case__img rise" src={d.cover} alt={d.coverAlt ?? ''} />
+      : <Placeholder class="case__cover rise" label={d.coverLabel} ratio="16 / 8" />}
 
     <div class="prose case__body">
       <Content />
@@ -85,6 +87,7 @@ const hasDemo = Boolean(d.links.demo || d.links.appStore);
   .facts dd { margin: 0; font-weight: 700; font-size: 0.9375rem; }
 
   .case__body { margin-top: clamp(2.5rem, 6vw, 4rem); }
+  .case__img { width: 100%; max-height: 560px; object-fit: contain; padding: 2.5rem 0; background: var(--tint); border-radius: 14px; }
 
   .next { margin-top: clamp(4rem, 10vw, 6rem); border-top: 1px solid var(--line); }
   .next a { display: grid; gap: 0.3rem; padding-top: 2rem; text-decoration: none; }

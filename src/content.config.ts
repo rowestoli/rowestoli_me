@@ -21,6 +21,9 @@ const projects = defineCollection({
     phones: z.number().optional(),
     order: z.number().default(99),
     coverLabel: z.string(),
+    // Optional screenshot in /public; replaces the placeholder when set
+    cover: z.string().optional(),
+    coverAlt: z.string().optional(),
     links: z
       .object({
         demo: z.string().optional(),

@@ -23,7 +23,9 @@ const live = d.status.startsWith('Live');
         ? Array.from({ length: d.phones }, (_, i) => (
             <Placeholder label={`${d.title} screen ${i + 1} here`} ratio="9 / 19" />
           ))
-        : <Placeholder label={d.coverLabel} />}
+        : d.cover
+          ? <img class="card__img" src={d.cover} alt={d.coverAlt ?? ''} loading="lazy" decoding="async" />
+          : <Placeholder label={d.coverLabel} />}
     </div>
     <div class="card__body">
       <div class="card__meta">
@@ -62,7 +64,8 @@ const live = d.status.startsWith('Live');
     background: radial-gradient(420px circle at var(--mx) var(--my), rgb(255 255 255 / 0.09), transparent 45%);
     opacity: 0; transition: opacity 300ms;
   }
-  .card__preview :global(.ph) { border-radius: 0; transition: transform 700ms var(--ease-out); }
+  .card__preview :global(.ph), .card__img { border-radius: 0; transition: transform 700ms var(--ease-out); }
+  .card__img { width: 100%; height: 100%; object-fit: contain; padding: 4% 0; background: var(--tint); }
   .card__preview:not(.card__preview--phones) :global(.ph) { aspect-ratio: auto !important; height: 100%; }
   .card__preview--phones {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.5rem, 2vw, 1.25rem);
@@ -79,7 +82,8 @@ const live = d.status.startsWith('Live');
     box-shadow: 0 22px 44px -20px var(--shadow);
   }
   .card__link:hover .card__preview::after { opacity: 1; }
-  .card__link:hover .card__preview:not(.card__preview--phones) :global(.ph) { transform: scale(1.04); }
+  .card__link:hover .card__preview:not(.card__preview--phones) :global(.ph),
+  .card__link:hover .card__img { transform: scale(1.04); }
   .card__link:hover .card__preview--phones :global(.ph) { transform: translateY(-8px); }
   .card__link:hover .card__preview--phones :global(.ph:nth-child(2)) { transform: translateY(-14px); transition-delay: 40ms; }
   .card__link:hover .card__preview--phones :global(.ph:nth-child(3)) { transition-delay: 80ms; }
