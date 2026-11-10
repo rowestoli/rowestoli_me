@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "photos": "node scripts/import-photos.mjs"
   },
   "dependencies": {
-    "astro": "^7.4.8"
+    "astro": "^7.4.8",
+    "sharp": "^0.35.5"
   }
 }

@@ -82,7 +82,14 @@ function initLightbox() {
 
   const offs = items.map((item) => {
     const open = () => {
-      frame.replaceChildren(...Array.from(item.children).map((c) => c.cloneNode(true)));
+      if (item.dataset.full) {
+        const img = new Image();
+        img.src = item.dataset.full;
+        img.alt = item.dataset.alt ?? '';
+        frame.replaceChildren(img);
+      } else {
+        frame.replaceChildren(...Array.from(item.children).map((c) => c.cloneNode(true)));
+      }
       dialog.showModal();
     };
     item.addEventListener('click', open);

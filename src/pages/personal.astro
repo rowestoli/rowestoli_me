@@ -1,6 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
+import Photo from '../components/Photo.astro';
+import { getImage } from 'astro:assets';
+import { carAlt, photo, photos } from '../data/photos';
 
 const honors = [
   { year: '2024', text: 'NCR Division I National Champions' },
@@ -10,20 +13,28 @@ const honors = [
   { year: '2025', text: 'All Conference' },
 ];
 
-// Car photography: swap each label for an <img> once the photos are in /public/photos/cars
-const cars = [
+// Rugby: the wide slot uses an action shot if there is one, otherwise the team photo.
+const action = photo('rugby', 'action-wide');
+const team = photo('rugby', 'team');
+const wide = action ?? team;
+const wideAlt = action ? 'Rowe playing rugby for Brown' : 'Brown Rugby celebrating the 2024 NCR Division I national championship';
+
+// Car photography: every photo in src/assets/img/cars, in file-name order, with a larger version for the lightbox.
+const cars = await Promise.all(photos('cars').map(async (p) => ({
+  ...p,
+  alt: carAlt[p.name] ?? 'Car photo',
+  full: (await getImage({ src: p.src, width: Math.min(2000, p.src.width), format: 'webp' })).src,
+})));
+const carSlots = [
   { label: 'Car photo 1 here (landscape)', ratio: '3 / 2' },
   { label: 'Car photo 2 here (portrait)', ratio: '4 / 5' },
   { label: 'Car photo 3 here (landscape)', ratio: '3 / 2' },
-  { label: 'Car photo 4 here (portrait)', ratio: '4 / 5' },
-  { label: 'Car photo 5 here (landscape)', ratio: '16 / 9' },
-  { label: 'Car photo 6 here (square)', ratio: '1 / 1' },
 ];
 
 const hobbies = [
-  { title: 'Building my PC', text: 'A custom build that now runs local AI models for my side projects.', label: 'PC build photo here' },
-  { title: 'Hobby title here', text: 'Placeholder: something you love doing and why.', label: 'Hobby photo here' },
-  { title: 'Hobby title here', text: 'Placeholder: another thing worth knowing about you.', label: 'Hobby photo here' },
+  { title: 'Building my PC', text: 'A custom build that now runs local AI models for my side projects.', label: 'PC build photo here', src: photo('hobbies', 'pc-build') },
+  { title: 'Hobby title here', text: 'Placeholder: something you love doing and why.', label: 'Hobby photo here', src: photo('hobbies', 'hobby-2') },
+  { title: 'Hobby title here', text: 'Placeholder: another thing worth knowing about you.', label: 'Hobby photo here', src: photo('hobbies', 'hobby-3') },
 ];
 ---
 
@@ -35,7 +46,7 @@ const hobbies = [
 
   <section class="section wrap rugby" aria-labelledby="rugby">
     <div class="rugby__photo">
-      <Placeholder label="Rugby action shot here (wide)" ratio="16 / 10" />
+      <Photo src={wide} alt={wideAlt} label="Rugby action shot here (wide)" ratio="16 / 10" sizes="(max-width: 860px) 100vw, 56vw" eager />
     </div>
     <div class="rugby__copy">
       <h2 id="rugby">Brown Rugby</h2>
@@ -47,9 +58,9 @@ const hobbies = [
       </ul>
     </div>
     <div class="rugby__strip">
-      <Placeholder label="Rugby photo here" ratio="1 / 1" />
-      <Placeholder label="Team photo here" ratio="1 / 1" />
-      <Placeholder label="Rugby photo here" ratio="1 / 1" />
+      <Photo src={photo('rugby', 'rugby-1')} alt="Brown Rugby match" label="Rugby photo here" ratio="1 / 1" sizes="(max-width: 860px) 33vw, 22rem" />
+      <Photo src={action ? team : undefined} alt="Brown Rugby team photo" label="Team photo here" ratio="1 / 1" sizes="(max-width: 860px) 33vw, 22rem" />
+      <Photo src={photo('rugby', 'rugby-2')} alt="Brown Rugby match" label="Rugby photo here" ratio="1 / 1" sizes="(max-width: 860px) 33vw, 22rem" />
     </div>
   </section>
 
@@ -59,11 +70,17 @@ const hobbies = [
       <p class="muted">Select a photo to see it larger.</p>
     </div>
     <div class="gallery">
-      {cars.map((c) => (
-        <button class="gallery__item" type="button" data-lightbox aria-label={`Open ${c.label}`}>
-          <Placeholder label={c.label} ratio={c.ratio} />
-        </button>
-      ))}
+      {cars.length
+        ? cars.map((c) => (
+            <button class="gallery__item" type="button" data-lightbox data-full={c.full} data-alt={c.alt} aria-label={`Open photo: ${c.alt}`}>
+              <Photo src={c.src} alt={c.alt} label="" ratio={`${c.src.width} / ${c.src.height}`} sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 24rem" />
+            </button>
+          ))
+        : carSlots.map((c) => (
+            <button class="gallery__item" type="button" data-lightbox aria-label={`Open ${c.label}`}>
+              <Placeholder label={c.label} ratio={c.ratio} />
+            </button>
+          ))}
     </div>
   </section>
 
@@ -74,7 +91,7 @@ const hobbies = [
     <div class="hobbies">
       {hobbies.map((h) => (
         <article class="hobby">
-          <Placeholder label={h.label} ratio="4 / 3" />
+          <Photo src={h.src} alt={h.title} label={h.label} ratio="4 / 3" sizes="(max-width: 860px) 100vw, 30vw" />
           <h3>{h.title}</h3>
           <p class="muted">{h.text}</p>
         </article>
@@ -104,8 +121,8 @@ const hobbies = [
     transition: transform 400ms var(--ease-out);
   }
   .gallery__item:hover { transform: translateY(-4px); }
-  .gallery__item :global(.ph) { transition: box-shadow 400ms var(--ease-out); }
-  .gallery__item:hover :global(.ph) { box-shadow: 0 22px 44px -20px var(--shadow); }
+  .gallery__item :global(.ph), .gallery__item :global(.photo) { transition: box-shadow 400ms var(--ease-out); }
+  .gallery__item:hover :global(.ph), .gallery__item:hover :global(.photo) { box-shadow: 0 22px 44px -20px var(--shadow); }
 
   .hobbies { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 3vw, 2rem); }
   .hobby { display: grid; gap: 0.75rem; align-content: start; }
@@ -117,6 +134,7 @@ const hobbies = [
   .lightbox::backdrop { background: rgb(10 12 11 / 0.9); backdrop-filter: blur(6px); }
   .lightbox[open] .lightbox__frame { animation: pop 260ms var(--ease); }
   .lightbox__frame :global(.ph) { max-height: 82vh; }
+  .lightbox__frame :global(img) { display: block; max-width: 100%; max-height: 82vh; margin-inline: auto; border-radius: 12px; }
   .lightbox__close {
     position: absolute; top: -2.75rem; right: 0;
     font: inherit; font-weight: 700; color: var(--ink); background: var(--white); border: 1.5px solid var(--ink); border-radius: 999px;

@@ -6,3 +6,6 @@ dist/
 !.env.example
 .DS_Store
 .netlify/
+
+# Photo drop folder: originals stay on your machine; `npm run photos` writes web-sized copies to src/assets/img
+src/assets/photos/

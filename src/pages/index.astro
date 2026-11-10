@@ -8,6 +8,8 @@ import { site, experience } from '../data/site';
 
 const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = all.filter((p) => p.data.featured);
+import Photo from '../components/Photo.astro';
+import { photo } from '../data/photos';
 ---
 
 <Base>
@@ -44,7 +46,9 @@ const featured = all.filter((p) => p.data.featured);
   </section>
 
   <section class="section wrap about" aria-labelledby="about">
-    <Placeholder class="about__photo" label="Headshot here" ratio="4 / 5" />
+    <div class="about__photo">
+      <Photo src={photo('headshot', 'headshot')} alt="Rowe Stodolnic" label="Headshot here" ratio="4 / 5" position="50% 30%" sizes="(max-width: 860px) 300px, 32vw" />
+    </div>
     <div class="about__copy">
       <h2 id="about">About me</h2>
       <!-- Draft copy: edit to taste -->

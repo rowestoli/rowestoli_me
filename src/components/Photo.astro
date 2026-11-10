@@ -1,0 +1,28 @@
+---
+/** A photo from src/assets/img if it exists, otherwise a labeled placeholder in the same spot. */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  src?: ImageMetadata;
+  alt: string;
+  label: string; // placeholder text while the photo is missing
+  ratio?: string; // CSS aspect-ratio; the photo is cropped to fit
+  sizes?: string;
+  position?: string; // object-position for the crop
+  class?: string;
+  eager?: boolean;
+}
+const { src, alt, label, ratio = '4 / 3', sizes = '(max-width: 860px) 100vw, 50vw', position = '50% 50%', class: cls = '', eager = false } = Astro.props;
+const widths = src ? [480, 800, 1200, 1800, 2400].filter((w) => w <= src.width) : [];
+---
+
+{src
+  ? <Image src={src} alt={alt} widths={widths.length ? widths : [src.width]} sizes={sizes} loading={eager ? 'eager' : 'lazy'}
+      class:list={['photo', cls]} style={`aspect-ratio: ${ratio}; object-position: ${position}`} />
+  : <Placeholder label={label} ratio={ratio} class={cls} />}
+
+<style>
+  :global(img.photo) { display: block; width: 100%; height: auto; object-fit: cover; border-radius: 12px; background: var(--tint); }
+</style>
