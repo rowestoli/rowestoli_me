@@ -24,6 +24,8 @@ const projects = defineCollection({
     // Optional screenshot in /public; replaces the placeholder when set
     cover: z.string().optional(),
     coverAlt: z.string().optional(),
+    // 'cover' fills the frame (screenshots), 'contain' fits the whole image (diagrams, boards)
+    coverFit: z.enum(['cover', 'contain']).default('contain'),
     links: z
       .object({
         demo: z.string().optional(),
