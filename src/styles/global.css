@@ -126,6 +126,10 @@ a:hover { color: var(--forest); }
 .prose em { color: var(--reed); }
 .prose code { font-size: 0.88em; background: var(--tint); padding: 0.1em 0.35em; border-radius: 4px; }
 .prose strong { font-weight: 700; }
+.prose figure { margin: 1.8em 0; }
+.prose figure img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--white); }
+.prose figcaption { margin-top: 0.6rem; font-size: var(--step--1); color: var(--mist); }
+@media (min-width: 1100px) { .prose figure { margin-inline: -4rem; } .prose figcaption { margin-inline: 4rem; } }
 .prose table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
 .prose th, .prose td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); }
 .prose th { color: var(--mist); font-weight: 400; font-size: var(--step--1); }

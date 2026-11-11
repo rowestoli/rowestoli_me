@@ -38,7 +38,7 @@ const hasDemo = Boolean(d.links.demo || d.links.appStore);
         {links.map((l) => (
           <a class:list={['btn', !l.primary && 'btn--ghost']} href={d.links[l.key]}>{l.label}</a>
         ))}
-        {!hasDemo && <span class="btn btn--ghost" aria-disabled="true">Live demo coming soon</span>}
+        {!hasDemo && d.status !== 'Case study' && <span class="btn btn--ghost" aria-disabled="true">Live demo coming soon</span>}
       </div>
     </header>
 
