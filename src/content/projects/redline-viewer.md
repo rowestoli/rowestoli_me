@@ -6,7 +6,7 @@ status: Live demo
 role: Solo rebuild (first version built with a partner)
 timeline: Fall 2024 – present
 stack: [TypeScript, MapLibre GL, Python, GeoJSON, Netlify]
-origin: Started as a CSCI 0320 (Software Engineering) project at Brown with a Java backend, then rebuilt as a serverless web app.
+origin: Started as a CSCI 0320 (Introduction to Software Engineering) project at Brown with a Java backend, then rebuilt as a serverless web app.
 order: 5
 coverLabel: Map screenshot
 cover: /projects/redline-viewer.webp

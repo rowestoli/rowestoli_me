@@ -42,3 +42,47 @@ export const experience = [
 ];
 
 export const categoryLabels = { app: 'App', ai: 'AI', web: 'Web & data', design: 'Design' } as const;
+
+// Coursework at Brown. `projects` are slugs in src/content/projects built from that course.
+type Course = { code: string; name: string; projects?: string[] };
+export const coursework: { area: string; courses: Course[] }[] = [
+  {
+    area: 'Computer science and data',
+    courses: [
+      { code: 'CSCI 0111', name: 'Computing Foundations: Data' },
+      { code: 'CSCI 0200', name: 'Program Design with Data Structures and Algorithms' },
+      { code: 'CSCI 0220', name: 'Discrete Structures and Probability' },
+      { code: 'CSCI 0320', name: 'Introduction to Software Engineering', projects: ['redline-viewer', 'nba-predictor'] },
+      { code: 'CSCI 0410', name: 'Foundations of AI and Machine Learning', projects: ['go-ai', 'ai-playground'] },
+      { code: 'CSCI 0500', name: 'Data Structures, Algorithms, and Intractability' },
+      { code: 'CSCI 1290', name: 'Computational Photography', projects: ['photo-lab'] },
+      { code: 'CSCI 1300', name: 'Interactive Design', projects: ['design-process'] },
+      { code: 'DATA 0080', name: 'Data, Ethics, and Society' },
+    ],
+  },
+  {
+    area: 'Economics and finance',
+    courses: [
+      { code: 'ECON 0110', name: 'Principles of Economics' },
+      { code: 'ECON 0710', name: 'Financial Accounting' },
+      { code: 'ECON 1090', name: 'Introduction to Game Theory' },
+      { code: 'ECON 1110', name: 'Intermediate Microeconomics' },
+      { code: 'ECON 1210', name: 'Intermediate Macroeconomics' },
+      { code: 'ECON 1420', name: 'Industrial Organization' },
+      { code: 'ECON 1629', name: 'Applied Research Methods for Economists' },
+      { code: 'ECON 1710', name: 'Investments I' },
+      { code: 'ECON 1720', name: 'Corporate Finance' },
+      { code: 'ECON 1820', name: 'Behavioral Economics' },
+      { code: 'ECON 1850', name: 'Theory of Economic Growth' },
+      { code: 'ENGN 0090', name: 'Management of Industrial and Nonprofit Organizations' },
+    ],
+  },
+  {
+    area: 'Math and statistics',
+    courses: [
+      { code: 'MATH 0100', name: 'Single Variable Calculus, Part II' },
+      { code: 'MATH 0520', name: 'Linear Algebra' },
+      { code: 'APMA 1650', name: 'Statistical Inference' },
+    ],
+  },
+];

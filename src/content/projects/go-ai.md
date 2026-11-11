@@ -6,7 +6,7 @@ status: Live demo
 role: Solo
 timeline: Spring 2026 – present
 stack: [TypeScript, Monte Carlo tree search, Neural network, Web Workers, Vite]
-origin: Started as my CSCI 0410 (Artificial Intelligence) final project at Brown, then rebuilt from scratch in TypeScript so it runs in any browser.
+origin: Started as my CSCI 0410 (Foundations of AI and Machine Learning) final project at Brown, then rebuilt from scratch in TypeScript so it runs in any browser.
 featured: true
 wide: true
 order: 4

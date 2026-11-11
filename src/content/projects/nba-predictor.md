@@ -6,7 +6,7 @@ status: Live demo
 role: Solo rebuild (first version built on a team of four)
 timeline: Fall 2024 – present
 stack: [Python, pandas, scikit-learn, TypeScript, Vite]
-origin: Started as the CSCI 0320 (Software Engineering) term project at Brown, then rebuilt from scratch with a proper backtest.
+origin: Started as the CSCI 0320 (Introduction to Software Engineering) term project at Brown, then rebuilt from scratch with a proper backtest.
 order: 6
 coverLabel: Player prediction screenshot
 cover: /projects/nba-predictor.webp

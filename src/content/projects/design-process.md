@@ -6,7 +6,7 @@ status: Case study
 role: Designer and researcher
 timeline: Spring 2025
 stack: [User research, Wireframing, Figma, HTML, CSS]
-origin: From CSCI 1300 (User Interfaces and User Experience) at Brown.
+origin: From CSCI 1300 (Interactive Design) at Brown.
 wide: true
 order: 9
 coverLabel: Sketch-to-wireframe progression here

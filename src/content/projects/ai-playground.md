@@ -6,7 +6,7 @@ status: Live demo
 role: Solo
 timeline: Spring 2026 – present
 stack: [TypeScript, Web Workers, Canvas, Vite]
-origin: Started as CSCI 0410 (Artificial Intelligence) coursework at Brown, then rebuilt to run in the browser.
+origin: Started as CSCI 0410 (Foundations of AI and Machine Learning) coursework at Brown, then rebuilt to run in the browser.
 order: 8
 coverLabel: Maze search race
 cover: /projects/ai-playground.webp

@@ -4,10 +4,12 @@ import Base from '../layouts/Base.astro';
 import PixelDuck from '../components/PixelDuck.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { site, experience } from '../data/site';
+import { site, experience, coursework } from '../data/site';
 
 const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = all.filter((p) => p.data.featured);
+const titles = Object.fromEntries(all.map((p) => [p.id, p.data.title]));
+const courseCount = coursework.reduce((n, a) => n + a.courses.length, 0);
 import Photo from '../components/Photo.astro';
 import { photo } from '../data/photos';
 ---
@@ -93,6 +95,33 @@ import { photo } from '../data/photos';
     </ol>
   </section>
 
+  <section class="section wrap" aria-labelledby="courses">
+    <div class="section__head">
+      <h2 id="courses">Coursework</h2>
+      <p class="muted">{courseCount} courses at Brown across computer science, economics and math. Where a class led to something you can try, it's linked.</p>
+    </div>
+    <div class="courses">
+      {coursework.map((group, gi) => (
+        <div class="courses__group" style={`--g:${gi}`}>
+          <h3>{group.area} <span class="muted">{group.courses.length}</span></h3>
+          <ul>
+            {group.courses.map((c, i) => (
+              <li class="course" style={`--i:${i}`}>
+                <span class="course__code">{c.code}</span>
+                <span class="course__name">{c.name}</span>
+                {c.projects && (
+                  <span class="course__projects">
+                    {c.projects.filter((slug) => titles[slug]).map((slug) => <a href={`/work/${slug}`}>{titles[slug]}</a>)}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
   <section class="section wrap contact" id="contact" aria-labelledby="contact-h">
     <h2 id="contact-h">Get in touch</h2>
     <p class="lede">I'm looking for full-time product and program management roles starting after May 2027. The fastest way to reach me is email.</p>
@@ -143,6 +172,33 @@ import { photo } from '../data/photos';
 
   .about { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; }
   .about__copy { display: grid; gap: 1.1rem; max-width: 38rem; }
+
+  .courses { display: grid; grid-template-columns: 1.15fr 1.15fr 0.8fr; gap: clamp(1.5rem, 3vw, 2.5rem); align-items: start; }
+  .courses__group h3 { font-size: var(--step-0); margin: 0 0 0.6rem; }
+  .courses__group h3 .muted { font-weight: 400; margin-left: 0.35rem; }
+  .courses ul { list-style: none; margin: 0; padding: 0; }
+  .course {
+    display: grid; grid-template-columns: 5.6rem 1fr; gap: 0.15rem 0.75rem; padding: 0.6rem 0;
+    border-top: 1px solid var(--line); font-size: var(--step--1); line-height: 1.45;
+    transition: background-color 200ms;
+  }
+  .course__code { color: var(--mist); font-variant-numeric: tabular-nums; white-space: nowrap; padding-top: 0.05rem; }
+  .course__name { color: var(--ink); }
+  .course__projects { grid-column: 2; display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }
+  .course__projects a {
+    font-size: 0.72rem; font-weight: 700; text-decoration: none; color: var(--forest);
+    padding: 0.15rem 0.55rem; border-radius: 999px; background: var(--mint); transition: background-color 150ms, color 150ms;
+  }
+  .course__projects a::after { content: ' →'; }
+  .course__projects a:hover { background: var(--blaze); color: var(--on-ink); }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .course { animation: course-in linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    }
+  }
+  @keyframes course-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (max-width: 900px) { .courses { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .courses { grid-template-columns: 1fr; } }
 
   .timeline { list-style: none; margin: 0; padding: 0; max-width: 52rem; }
   .job { position: relative; display: grid; grid-template-columns: 9rem 1fr; gap: 1.5rem; padding: 0 0 2.25rem; }
