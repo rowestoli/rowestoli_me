@@ -98,6 +98,8 @@ a:hover { color: var(--forest); }
 .btn:active { transform: translateY(0) scale(0.97); transition-duration: 80ms; }
 .btn--ghost { background: transparent; color: var(--ink); border-color: rgb(242 241 236 / 0.35); }
 .btn--ghost:hover { color: var(--on-ink); background: var(--ink); border-color: var(--ink); }
+.btn__icon { width: 1.1em; height: 1.1em; flex: none; transition: transform 260ms var(--ease-out); }
+.btn:hover .btn__icon { transform: scale(1.12) rotate(-6deg); }
 .btn[aria-disabled='true'] { opacity: 0.4; pointer-events: none; }
 
 .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0; margin: 0; list-style: none; }
