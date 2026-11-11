@@ -37,7 +37,7 @@ Birds Landing is a hunting and clay shooting club in Northern California. Its we
 - **Found the problems first.** I sorted issues into efficiency, learnability and memorability, then ran the site through the WebAIM WAVE accessibility checker. It flagged low color contrast, missing image descriptions, no heading structure, unlabeled form fields, no skip link for screen readers and touch targets too small for phones.
 - **Kept the brand, fixed the basics.** I kept the club's green and orange and its typeface so regulars would still recognize it, and raised contrast to meet the WCAG AA standard.
 - **Put booking first.** Hours and a Reserve button lead every page, because that's what most visitors come for.
-- **Built it, not just mocked it.** I coded it in HTML and CSS with Flexbox, breakpoints at 480, 767, 1024 and 1920 pixels, semantic markup and a hamburger menu on phones.
+- **Built it, not just mocked it.** I coded it in HTML and CSS with Flexbox, breakpoints at 480, 767, 1024 and 1920 pixels, semantic markup and a hamburger menu on phones. [Try the live redesign](/design/birds-landing/), and resize the window to watch it adapt.
 
 <figure>
   <img src="/projects/design/birds-styleguide.webp" alt="Style guide with the orange and green palette, the two typefaces, button states and the club's logos." loading="lazy" />

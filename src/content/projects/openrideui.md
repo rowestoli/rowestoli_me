@@ -8,26 +8,25 @@ timeline: '2026'
 stack: [React Native, Expo, TypeScript, Supabase, Google Places, Maps]
 featured: true
 order: 2
-coverLabel: OpenRideUI screenshots here (results screen)
+coverLabel: Screenshots coming with the next build
 links: {}
 ---
 
-## The problem
-
-Checking the price of a ride means opening several apps and retyping the same destination in each one.
-
-_Write-up placeholder: what pushed you to build this._
+Checking what a ride costs means opening several apps and typing the same destination into each one. OpenRideUI asks once and shows every way to get there side by side.
 
 ## What I built
 
-- One search that returns every option, with **sort by price or pickup time**.
-- **Deep links** that hand the trip off to the provider's app with the destination filled in.
-- **Fare reports** from riders, stored in Supabase, to improve estimates over time.
+- **One search, every option.** Rideshare products, bikes, scooters, walking and driving for the same trip, sorted by price or by arrival time, with the cheapest and fastest marked.
+- **Hand-off, not booking.** Picking an option opens the provider's own app with the trip filled in, so there are no accounts to link and no payments to handle.
+- **A backend that does the math.** A Supabase edge function looks up the route, the time of day and the city's rates, and returns every option in one call.
+- **Fare reports from riders.** After a ride, people can report what they actually paid, which feeds back into the estimates.
 
 ## Key decisions
 
-_Placeholder: why you chose deep links over booking in-app, and how you estimate fares._
+- **Deep links over in-app booking.** Ride companies don't offer open booking APIs, and hand-off keeps the app simple and avoids handling anyone's payment details.
+- **Estimates with honest labels.** Prices come from per-city rate cards, adjusted by reported fares where there are enough, and each option is marked as an estimate.
+- **Start with one city.** San Francisco first, so the rates can be checked against real rides before expanding.
 
-## What's next
+## Status
 
-_Placeholder._
+In development. The next step is a more accurate price model, rebuilt around the fares riders report.

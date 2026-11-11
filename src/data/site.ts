@@ -4,7 +4,7 @@ export const site = {
   title: 'Rowe Stodolnic — product, program and software',
   description:
     'Brown CS and Business Economics student who builds products end to end, from user research to the App Store.',
-  email: 'EMAIL_HERE@example.com', // TODO: replace with the address you want public
+  email: 'stolirowe@gmail.com',
   linkedin: 'https://www.linkedin.com/in/rowe-stodolnic',
   github: 'https://github.com/rowestoli',
   sourceRepo: 'https://github.com/rowestoli/rowestoli_me',
@@ -14,7 +14,7 @@ export const experience = [
   {
     company: 'Okta',
     role: 'IT Security, Program Manager Intern',
-    when: '2026', // TODO: confirm exact months
+    when: 'May – Aug 2026',
     place: 'San Francisco, CA',
     points: [
       'Built the root-cause-analysis process (wiki, templates, automation, P0–P2 SLAs), saving about 2 hours per incident; recognized by a security director.',

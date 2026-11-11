@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" font-family="Verdana, Geneva, sans-serif">
+  <rect width="1200" height="620" fill="#1c221e"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#8f978f"/>
+    </marker>
+  </defs>
+  <!-- Orchestrator -->
+  <rect x="300" y="40" width="600" height="150" rx="18" fill="#252d28" stroke="#e07830" stroke-width="2.5"/>
+  <text x="600" y="88" text-anchor="middle" font-size="30" font-weight="700" fill="#f2f1ec">Ultron</text>
+  <text x="600" y="122" text-anchor="middle" font-size="17" fill="#c3c8c1">refresh metrics → split budget by return</text>
+  <text x="600" y="150" text-anchor="middle" font-size="17" fill="#c3c8c1">→ run teams → strategy memo → shared playbook</text>
+  <!-- Budget arrows -->
+  <path d="M470 190 V250 H300 V280" fill="none" stroke="#8f978f" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M730 190 V250 H900 V280" fill="none" stroke="#8f978f" stroke-width="2" marker-end="url(#a)"/>
+  <text x="385" y="240" text-anchor="middle" font-size="15" fill="#8f978f">budget</text>
+  <text x="815" y="240" text-anchor="middle" font-size="15" fill="#8f978f">budget</text>
+  <!-- Teams -->
+  <rect x="110" y="282" width="380" height="170" rx="16" fill="#252d28" stroke="#8fcba2" stroke-width="2"/>
+  <text x="300" y="322" text-anchor="middle" font-size="22" font-weight="700" fill="#8fcba2">Etsy team</text>
+  <text x="300" y="356" text-anchor="middle" font-size="16" fill="#c3c8c1">research niches</text>
+  <text x="300" y="382" text-anchor="middle" font-size="16" fill="#c3c8c1">design printables and listing images</text>
+  <text x="300" y="408" text-anchor="middle" font-size="16" fill="#c3c8c1">write listings</text>
+  <text x="300" y="434" text-anchor="middle" font-size="16" fill="#c3c8c1">analyze: scale, keep or cut</text>
+  <rect x="710" y="282" width="380" height="170" rx="16" fill="#252d28" stroke="#8fcba2" stroke-width="2"/>
+  <text x="900" y="322" text-anchor="middle" font-size="22" font-weight="700" fill="#8fcba2">Pinterest team</text>
+  <text x="900" y="370" text-anchor="middle" font-size="16" fill="#c3c8c1">write pins for live listings</text>
+  <text x="900" y="396" text-anchor="middle" font-size="16" fill="#c3c8c1">to drive traffic to them</text>
+  <!-- Approval -->
+  <path d="M300 452 V500 H520" fill="none" stroke="#8f978f" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M900 452 V500 H680" fill="none" stroke="#8f978f" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="520" y="470" width="160" height="60" rx="30" fill="#e07830"/>
+  <text x="600" y="507" text-anchor="middle" font-size="17" font-weight="700" fill="#121614">My approval</text>
+  <path d="M600 530 V566" fill="none" stroke="#8f978f" stroke-width="2" marker-end="url(#a)"/>
+  <text x="600" y="594" text-anchor="middle" font-size="16" fill="#c3c8c1">publish to Etsy and Pinterest</text>
+</svg>

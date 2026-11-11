@@ -19,6 +19,8 @@ const projects = defineCollection({
     wide: z.boolean().default(false),
     // Show this many phone-shaped previews instead of one wide preview
     phones: z.number().optional(),
+    // Phone screenshots, in display order. The card shows the first `phones` of them.
+    screens: z.array(z.object({ src: z.string(), alt: z.string() })).optional(),
     order: z.number().default(99),
     coverLabel: z.string(),
     // Optional screenshot in /public; replaces the placeholder when set

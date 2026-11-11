@@ -2,13 +2,16 @@
 title: Ultron
 summary: An orchestrator agent that splits a fixed AI budget across teams of agents, measures which ones earn revenue, and moves budget toward them.
 category: ai
-status: Prototype
+status: In development
 role: Solo — architecture and engineering
 timeline: '2026'
 stack: [Python, SQLite, Anthropic API, Etsy API, Pinterest API]
 featured: true
 order: 3
-coverLabel: Ultron diagram or dashboard screenshot here
+coverLabel: How Ultron works
+cover: /projects/ultron.svg
+coverAlt: Diagram. Ultron splits a budget between an Etsy team and a Pinterest team, both send work to my approval, then it's published to Etsy and Pinterest.
+coverFit: contain
 links: {}
 ---
 
@@ -25,6 +28,6 @@ Treat AI agents like a small company: each team has a budget, a job and a measur
 
 Anything that spends money or publishes needs my approval first.
 
-## What's next
+## Status
 
-_Placeholder: results from the first run and the next team you'd add._
+In development. Version 1 runs end to end in a free test mode with simulated AI costs, and already produces real printable designs and listing images. Next, I'll connect the Etsy shop and run it live on a real model under a $1-a-day spending cap. After that, I plan to move it onto an open-source model running on the PC I built, then add teams for other ways of earning, such as short-form video. The goal is to see how far a small team of agents can get on a tight budget, not to get rich.
