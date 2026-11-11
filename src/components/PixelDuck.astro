@@ -1,8 +1,8 @@
 ---
 /**
- * Pixel-art mallard on a 64×56 grid. Its pupils follow the cursor (src/scripts/duck.ts).
- * The art is generated from simple shapes, so it's easy to tweak sizes and colors here.
- *  - variant "full": head and chest (hero, 404)
+ * Pixel-art mallard, drawn on a 28×28 grid and rendered at 2× (a 56×56 grid) so the eye can use
+ * half-size pixels: a big white eye with a pupil that follows the cursor (src/scripts/duck.ts).
+ *  - variant "full": head, collar and chest (hero, 404)
  *  - variant "head": just the head (nav)
  */
 interface Props {
@@ -13,101 +13,89 @@ interface Props {
 }
 const { variant = 'full', class: className = '', label = '', interactive = false } = Astro.props;
 
-const W = 64;
-const H = 56;
-
 const C: Record<string, string> = {
-  outline: '#1A1A1A',
-  head: '#2D5A3D',
-  headLo: '#1D3A28',
-  sheen: '#5B9A6E',
-  sheenHi: '#8CC09C',
-  ring: '#FAFAFA',
-  chest: '#8B5A2B',
-  chestHi: '#A67B4B',
-  chestLo: '#6B4A1B',
-  bill: '#F2C14E',
-  billLo: '#D9A031',
-  white: '#FFFFFF',
+  o: '#0f0718', // outline
+  g: '#1d643f', // head green
+  d: '#0d4140', // head shadow
+  s: '#3d954e', // sheen
+  h: '#53a263', // sheen highlight
+  l: '#78b08b', // brightest sheen
+  y: '#facd50', // bill highlight
+  b: '#f0ae12', // bill
+  n: '#c27117', // bill shadow
+  c: '#a4b2b8', // collar shadow
+  w: '#fefefd', // collar
+  r: '#7a2b16', // chest
+  m: '#4b1523', // chest shadow
 };
+const WHITE = '#ffffff';
 
-const inE = (x: number, y: number, cx: number, cy: number, rx: number, ry: number) =>
-  ((x + 0.5 - cx) / rx) ** 2 + ((y + 0.5 - cy) / ry) ** 2 <= 1;
-
-// Eyes: round whites, centered here (grid coords)
-const EYES = [
-  { cx: 21, cy: 20 },
-  { cx: 43, cy: 20 },
+// One character per pixel; '.' is transparent.
+const ART = [
+  '...............ooooooo......',
+  '.............oosgggggdoo....',
+  '...........oosgghhhhsggdo...',
+  '..........ogsggggggghhggdo..',
+  '.........ogsgggggggggghggdo.',
+  '.........osggggdddgggggggdo.',
+  '........odggggdgggdggggggddo',
+  '........oggggddgggdgggggggdo',
+  '........odogdddggggslgggggdo',
+  '.......oyoyoddggggssgsggggdo',
+  '......oyyybodgggggggggggggdo',
+  '....ooyyobbodgggggggggggdgdo',
+  '..ooyybbbbbnogggggggggggdgdo',
+  '.oyybbbbbbbbnogggggggggddgdo',
+  'obbbbbbbbnnonodgggggggdddgdo',
+  'oonnnnnnooonoddddgggddodgddo',
+  '..oooooo...oooddddddooddgddo',
+  '..............oooooodddggdo.',
+  '..............odddddddgggdo.',
+  '..............odddddggggddo.',
+  '..............odggggggggddo.',
+  '.............odggggggggdcco.',
+  '.............ocwgggggwwwcmmo',
+  '............omrwwwwwwwcmmmmo',
+  '...........omrrrrrrrrmmmmmm.',
+  '...........omrrrrrrrrrmmm...',
+  '............mrrrrrrrrmm.....',
+  '..............rrrrrrr.......',
 ];
-const EYE_R = 5.6;
-const isEye = (x: number, y: number) => EYES.some((e) => inE(x, y, e.cx, e.cy, EYE_R, EYE_R));
+const S = 2; // render scale: one art pixel = 2×2 grid pixels
+const W = ART[0].length * S;
+const H = ART.length * S;
 
-function pixel(x: number, y: number): string | null {
-  let c: string | null = null;
-  // Chest (cut off by the waterline)
-  if (y <= 55 && inE(x, y, 32, 64, 25, 22)) {
-    c = 'chest';
-    if (inE(x, y, 23, 52, 8, 5)) c = 'chestHi';
-    else if (x > 43 && y > 48) c = 'chestLo';
-  }
-  // Neck and white collar
-  if (x >= 20 && x <= 43 && y >= 30 && y <= 44 && (!c || y < 43)) c = y >= 39 && y <= 41 ? 'ring' : 'head';
-  // Head
-  if (inE(x, y, 32, 22, 21, 19)) {
-    c = 'head';
-    if (inE(x, y, 21, 11, 7, 4.5)) c = inE(x, y, 19, 10, 3, 1.8) ? 'sheenHi' : 'sheen';
-    else if (inE(x, y, 44, 31, 12, 8) && y > 26) c = 'headLo';
-  }
-  // Bill
-  if (inE(x, y, 32, 33, 11, 6)) c = y >= 34 ? 'billLo' : 'bill';
-  if ((x === 27 || x === 28 || x === 35 || x === 36) && y === 31) c = 'outline';
-  if (isEye(x, y)) c = 'white';
-  return c;
-}
-
-const fill: (string | null)[][] = Array.from({ length: H }, (_, y) => Array.from({ length: W }, (_, x) => pixel(x, y)));
-const grid: (string | null)[][] = fill.map((row) => row.slice());
-for (let y = 0; y < H; y++)
-  for (let x = 0; x < W; x++) {
-    if (fill[y][x]) continue;
-    const n = [fill[y - 1]?.[x], fill[y + 1]?.[x], fill[y]?.[x - 1], fill[y]?.[x + 1]];
-    if (n.some(Boolean)) grid[y][x] = 'outline';
-  }
-// Eye rims
-for (let y = 0; y < H; y++)
-  for (let x = 0; x < W; x++) {
-    if (!isEye(x, y)) continue;
-    for (const [nx, ny] of [[x, y - 1], [x, y + 1], [x - 1, y], [x + 1, y]])
-      if (!isEye(nx, ny) && grid[ny]?.[nx] && grid[ny][nx] !== 'outline') grid[ny][nx] = 'outline';
-  }
-
-const rects: { x: number; y: number; w: number; fill: string }[] = [];
-for (let y = 0; y < H; y++) {
+// Art pixels as horizontal runs, scaled up.
+const rects: { x: number; y: number; w: number; h: number; fill: string }[] = [];
+ART.forEach((row, y) => {
   let x = 0;
-  while (x < W) {
-    const c = grid[y][x];
-    if (!c) { x++; continue; }
+  while (x < row.length) {
+    const ch = row[x];
+    if (ch === '.') { x++; continue; }
     let w = 1;
-    while (x + w < W && grid[y][x + w] === c) w++;
-    rects.push({ x, y, w, fill: C[c] });
+    while (x + w < row.length && row[x + w] === ch) w++;
+    rects.push({ x: x * S, y: y * S, w: w * S, h: S, fill: C[ch] });
     x += w;
   }
-}
+});
 
-// Eyelid pixels (for blinking) = the eye-white pixels painted head green
+// The eye, on the fine grid: an oval white with a one-pixel outline.
+const EYE = { cx: 33, cy: 15, rx: 5, ry: 4.6 };
+const inEye = (x: number, y: number) => ((x + 0.5 - EYE.cx) / EYE.rx) ** 2 + ((y + 0.5 - EYE.cy) / EYE.ry) ** 2 <= 1;
+const eye: { x: number; y: number; w: number; fill: string }[] = [];
 const lids: { x: number; y: number; w: number }[] = [];
-for (let y = 0; y < H; y++) {
-  let x = 0;
-  while (x < W) {
-    if (!isEye(x, y)) { x++; continue; }
-    let w = 1;
-    while (x + w < W && isEye(x + w, y)) w++;
-    lids.push({ x, y, w });
-    x += w;
+for (let y = EYE.cy - 7; y <= EYE.cy + 7; y++) {
+  for (let x = EYE.cx - 8; x <= EYE.cx + 8; x++) {
+    const white = inEye(x, y);
+    const rim = !white && [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => inEye(x + dx, y + dy));
+    if (white) { eye.push({ x, y, w: 1, fill: WHITE }); lids.push({ x, y, w: 1 }); }
+    else if (rim) eye.push({ x, y, w: 1, fill: C.o });
   }
 }
+// Pupil: 4×4 with the corners cut, plus a glint. duck.ts moves it up to 3 fine pixels.
+const PUPIL = { x: EYE.cx - 2, y: EYE.cy - 2 };
 
-const viewBox = variant === 'full' ? `0 0 ${W} ${H}` : `9 0 46 46`;
+const viewBox = variant === 'full' ? `0 0 ${W} ${H}` : `0 0 ${W} 34`;
 const a11y = interactive
   ? { role: 'button', tabindex: 0, 'aria-label': `${label || 'Pixel-art duck'}. Press to quack.` }
   : label
@@ -117,19 +105,18 @@ const a11y = interactive
 
 <div class:list={['duck', `duck--${variant}`, interactive && 'duck--interactive', className]} data-duck {...a11y}>
   <svg viewBox={viewBox} shape-rendering="crispEdges" aria-hidden="true" focusable="false">
-    {rects.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.fill} />)}
+    {rects.map((r) => <rect x={r.x} y={r.y} width={r.w} height={r.h} fill={r.fill} />)}
+    <g data-eye>{eye.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.fill} />)}</g>
     <g class="duck__pupils" data-pupils>
-      {EYES.map((e) => (
-        <g transform={`translate(${Math.floor(e.cx) - 2} ${Math.floor(e.cy) - 2})`}>
-          <rect x="1" y="0" width="2" height="1" fill={C.outline} />
-          <rect x="0" y="1" width="4" height="2" fill={C.outline} />
-          <rect x="1" y="3" width="2" height="1" fill={C.outline} />
-          <rect x="1" y="1" width="1" height="1" fill={C.white} />
-        </g>
-      ))}
+      <g transform={`translate(${PUPIL.x} ${PUPIL.y})`}>
+        <rect x="1" y="0" width="2" height="1" fill={C.o} />
+        <rect x="0" y="1" width="4" height="2" fill={C.o} />
+        <rect x="1" y="3" width="2" height="1" fill={C.o} />
+        <rect x="1" y="1" width="1" height="1" fill={WHITE} />
+      </g>
     </g>
     <g class="duck__lids">
-      {lids.map((l) => <rect x={l.x} y={l.y} width={l.w} height="1" fill={C.head} />)}
+      {lids.map((l) => <rect x={l.x} y={l.y} width={l.w} height="1" fill={C.g} />)}
     </g>
   </svg>
   {interactive && <span class="duck__bubble" aria-live="polite" data-bubble></span>}

@@ -1,7 +1,8 @@
-// Duck eyes: pupils follow the pointer (up to 3 art-pixels in any direction), blink now and then,
-// glance around when idle, and the hero duck quacks when clicked.
+// Duck eye: the pupil follows the pointer (up to 3 fine pixels sideways, 2 up or down), blinks now
+// and then, glances around when idle, and the hero duck quacks when clicked.
 
-const MAX = 3; // max pupil travel in art pixels
+const MAX = 3; // max sideways pupil travel, in fine pixels
+const MAX_Y = 2; // max vertical travel (the eye is a little wider than tall)
 const QUACKS = ['Quack!', 'Quack quack.', 'Hi there.', 'Try QuackLog.', 'Okay, that tickles.'];
 
 let pointer: { x: number; y: number } | null = null;
@@ -23,20 +24,17 @@ function setPupils(duck: HTMLElement, ox: number, oy: number) {
 function look(duck: HTMLElement, tx: number, ty: number) {
   const r = duck.getBoundingClientRect();
   if (!r.width) return;
-  // Eyes sit about a third of the way down the full duck, lower in the head-only crop
-  const cx = r.left + r.width / 2;
-  const cy = r.top + r.height * (duck.classList.contains('duck--head') ? 0.45 : 0.32);
+  // Aim from the eye itself, wherever it sits in this crop of the duck
+  const eye = duck.querySelector('[data-eye]')?.getBoundingClientRect();
+  const cx = eye && eye.width ? eye.left + eye.width / 2 : r.left + r.width / 2;
+  const cy = eye && eye.width ? eye.top + eye.height / 2 : r.top + r.height / 3;
   const dx = tx - cx;
   const dy = ty - cy;
   const dist = Math.hypot(dx, dy) || 1;
   // Reach full travel once the pointer is a duck-width or so away
   const reach = Math.min(1, dist / Math.max(60, r.width * 0.9));
-  let ox = Math.round((dx / dist) * MAX * reach);
-  let oy = Math.round((dy / dist) * MAX * reach);
-  if (Math.hypot(ox, oy) > MAX + 0.2) {
-    ox = Math.round(ox * 0.75);
-    oy = Math.round(oy * 0.75);
-  }
+  const ox = Math.round((dx / dist) * MAX * reach);
+  const oy = Math.round((dy / dist) * MAX_Y * reach);
   setPupils(duck, ox, oy);
 }
 
@@ -64,7 +62,7 @@ function blink() {
 function idle() {
   if (performance.now() - lastMove > 4000) {
     const ox = Math.round(Math.random() * 2 * MAX - MAX);
-    const oy = Math.round(Math.random() * 2 * (MAX - 1) - (MAX - 1));
+    const oy = Math.round(Math.random() * 2 * MAX_Y - MAX_Y);
     for (const d of ducks()) setPupils(d, ox, oy);
   }
   idleTimer = window.setTimeout(idle, 1800 + Math.random() * 2200);
