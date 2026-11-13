@@ -15,6 +15,7 @@ coverFit: cover
 demoLabel: Explore the control room
 links:
   demo: /ultron/hq/
+  repo: https://github.com/rowestoli/ultron
 ---
 
 ## The idea
