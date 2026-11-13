@@ -14,6 +14,8 @@ const projects = defineCollection({
     timeline: z.string(),
     stack: z.array(z.string()),
     origin: z.string().optional(),
+    /** Button text for links.demo when "Try the live demo" would overpromise. */
+    demoLabel: z.string().optional(),
     featured: z.boolean().default(false),
     // Wide cards span two columns on the work grid
     wide: z.boolean().default(false),
