@@ -19,6 +19,7 @@ screens:
 demoLabel: Try it in your browser
 links:
   demo: /openrideui/demo/
+  repo: https://github.com/rowestoli/OpenRideUI
 ---
 
 Checking what a ride costs means opening several apps and typing the same destination into each one. OpenRideUI asks once and shows every way to get there side by side.
