@@ -8,8 +8,17 @@ timeline: '2026'
 stack: [React Native, Expo, TypeScript, Supabase, Google Places, Maps]
 featured: true
 order: 2
-coverLabel: Screenshots coming with the next build
-links: {}
+phones: 2
+coverLabel: OpenRideUI screenshots
+screens:
+  - { src: /projects/openrideui/02-results.webp, alt: "Results for Union Square to the Castro Theatre: a map, then every option sorted by price, from driving and a Tesla Cybercab to Lyft, Waymo and UberX, each with a price range and trip time." }
+  - { src: /projects/openrideui/01-search.webp, alt: "Home screen: a map of San Francisco with the rider's location, and From and To fields with a Compare Rides button." }
+  - { src: /projects/openrideui/03-report.webp, alt: "Report a price sheet: choose whether it's the price another app showed or the fare paid, pick the ride, and enter the amount." }
+  - { src: /projects/openrideui/04-results-dark.webp, alt: "The results screen in dark mode." }
+  - { src: /projects/openrideui/05-places.webp, alt: "Searching for a destination: typing Castro suggests the Castro Theatre." }
+demoLabel: Try it in your browser
+links:
+  demo: /openrideui/demo/
 ---
 
 Checking what a ride costs means opening several apps and typing the same destination into each one. OpenRideUI asks once and shows every way to get there side by side.
@@ -39,6 +48,10 @@ Riders had reported almost no fares, so I couldn't learn the prices from riders.
 
 Fitted on medians, the model gets the provider order right and misses the average quote, which it never saw, by 8% instead of 52%. The clearest remaining gap is very short trips, where it makes Waymo about twice Uber's price against 1.4× in the one study that measures it. That is where rider quotes will help first.
 
+## Try it
+
+The browser demo is the real app, built for the web from the same code, calling the live backend and the new price model. Two parts are stand-ins, because the native versions don't run in a browser: the map draws OpenStreetMap tiles, and the destination search offers a fixed list of San Francisco places instead of Google's.
+
 ## Status
 
-In development. The new price model is built and tested, and goes live with the next backend deploy.
+In development. The backend has run the new price model since November 2026. Next, the app collects quotes to narrow the price ranges and fix short Waymo trips.

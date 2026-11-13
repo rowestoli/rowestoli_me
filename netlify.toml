@@ -4,3 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# The OpenRideUI browser demo is a single-page app: send its deep links to its index.
+[[redirects]]
+  from = "/openrideui/demo/*"
+  to = "/openrideui/demo/index.html"
+  status = 200

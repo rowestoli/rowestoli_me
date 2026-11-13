@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>OpenRideUI demo</title>
+    <meta name="robots" content="noindex" />
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+  <link rel="icon" href="/openrideui/demo/favicon.ico" />
+    <style id="demo-frame">
+      @media (min-width: 600px) {
+        html, body { background: #101513; }
+        body { display: flex; align-items: center; justify-content: center; }
+        #root {
+          flex: none; width: 400px; height: min(860px, calc(100vh - 48px));
+          border-radius: 32px; overflow: hidden; transform: translateZ(0);
+          box-shadow: 0 0 0 10px #1d2420, 0 30px 80px rgba(0, 0, 0, 0.55);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  <script src="/openrideui/demo/_expo/static/js/web/entry-5be8b3f302b4df0b08ff1f9569a76ac7.js" defer></script>
+</body>
+</html>
