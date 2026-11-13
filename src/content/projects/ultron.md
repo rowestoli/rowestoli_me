@@ -54,7 +54,7 @@ In November 2026 I switched Ultron from free test mode to Claude and connected i
 - **7 printables designed and sent to Etsy as drafts** through the API, each after I approved it.
 - **I cut 5 of the 7 prices to $1.99.** Each change went into the playbook as a lesson, so the lister's next prices start lower.
 
-A week later I made all seven live. That cost $1.40 in Etsy fees, which Ultron books as costs like its AI spend, so its profit line reads -$1.45. The Pinterest team then wrote its first three pins to send people to them, and they're waiting at the gate for my approval. Revenue is still $0, and Ultron's own memo says the same thing I would: until there are views and sales, there's no real verdict.
+A week later I made all seven live. That cost $1.40 in Etsy fees, which Ultron books as costs like its AI spend, so its profit line reads -$1.45. The Pinterest team then wrote its first three pins to send people to them, and they're waiting at the gate for my approval. Revenue is still $0. As Ultron's own memo puts it, there's no real verdict until there are views and sales.
 
 ## Status
 
