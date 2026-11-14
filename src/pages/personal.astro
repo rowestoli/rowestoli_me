@@ -31,11 +31,22 @@ const carSlots = [
   { label: 'Car photo 3 here (landscape)', ratio: '3 / 2' },
 ];
 
-const hobbies = [
+// Empty slots show as labeled placeholders in `npm run dev` only. The live site hides
+// them until there's a photo (or, for hobbies, real text) to show.
+const SHOW_SLOTS = import.meta.env.DEV;
+
+const allHobbies = [
   { title: 'Building my PC', text: 'A custom build that now runs local AI models for my side projects.', label: 'PC build photo here', src: photo('hobbies', 'pc-build') },
-  { title: 'Hobby title here', text: 'Placeholder: something you love doing and why.', label: 'Hobby photo here', src: photo('hobbies', 'hobby-2') },
-  { title: 'Hobby title here', text: 'Placeholder: another thing worth knowing about you.', label: 'Hobby photo here', src: photo('hobbies', 'hobby-3') },
+  { title: 'Hobby title here', text: 'Placeholder: something you love doing and why.', label: 'Hobby photo here', src: photo('hobbies', 'hobby-2'), draft: true },
+  { title: 'Hobby title here', text: 'Placeholder: another thing worth knowing about you.', label: 'Hobby photo here', src: photo('hobbies', 'hobby-3'), draft: true },
 ];
+const hobbies = allHobbies.filter((h) => SHOW_SLOTS || !h.draft);
+
+const strip = [
+  { src: photo('rugby', 'rugby-1'), alt: 'Brown Rugby match', label: 'Rugby photo here' },
+  { src: action ? team : undefined, alt: 'Brown Rugby team photo', label: 'Team photo here' },
+  { src: photo('rugby', 'rugby-2'), alt: 'Brown Rugby match', label: 'Rugby photo here' },
+].filter((p) => SHOW_SLOTS || p.src);
 ---
 
 <Base title="Personal" description="Rugby, car photography and life outside work.">
@@ -57,11 +68,13 @@ const hobbies = [
         ))}
       </ul>
     </div>
-    <div class="rugby__strip">
-      <Photo src={photo('rugby', 'rugby-1')} alt="Brown Rugby match" label="Rugby photo here" ratio="1 / 1" sizes="(max-width: 860px) 33vw, 22rem" />
-      <Photo src={action ? team : undefined} alt="Brown Rugby team photo" label="Team photo here" ratio="1 / 1" sizes="(max-width: 860px) 33vw, 22rem" />
-      <Photo src={photo('rugby', 'rugby-2')} alt="Brown Rugby match" label="Rugby photo here" ratio="1 / 1" sizes="(max-width: 860px) 33vw, 22rem" />
-    </div>
+    {strip.length > 0 && (
+      <div class="rugby__strip">
+        {strip.map((p) => (
+          <Photo src={p.src} alt={p.alt} label={p.label} ratio="1 / 1" sizes="(max-width: 860px) 33vw, 22rem" />
+        ))}
+      </div>
+    )}
   </section>
 
   <section class="section wrap" aria-labelledby="cars">
@@ -91,7 +104,7 @@ const hobbies = [
     <div class="hobbies">
       {hobbies.map((h) => (
         <article class="hobby">
-          <Photo src={h.src} alt={h.title} label={h.label} ratio="4 / 3" sizes="(max-width: 860px) 100vw, 30vw" />
+          {(h.src || SHOW_SLOTS) && <Photo src={h.src} alt={h.title} label={h.label} ratio="4 / 3" sizes="(max-width: 860px) 100vw, 30vw" />}
           <h3>{h.title}</h3>
           <p class="muted">{h.text}</p>
         </article>
