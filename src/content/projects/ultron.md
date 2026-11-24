@@ -1,6 +1,7 @@
 ---
 title: Ultron
 summary: An orchestrator agent that splits a fixed AI budget across teams of agents, measures which ones earn revenue, and moves budget toward them.
+tldr: "An AI agent that manages a small team of other AI agents on a fixed budget, funds whichever ones earn money, and shows it all in a pixel-art control room. Its Etsy team found niches, designed seven printables and listed them for about 5 cents of AI, and nothing goes live without my approval."
 category: ai
 status: In development
 role: Solo — architecture and engineering

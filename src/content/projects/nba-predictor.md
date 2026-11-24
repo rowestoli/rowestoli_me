@@ -1,6 +1,7 @@
 ---
 title: NBA stat predictor
 summary: Pick a player and matchup to see projected points, rebounds, assists and threes for their next game, with calibrated over/under odds for any line.
+tldr: "Pick a player and an opponent to get projected points, rebounds, assists and threes, plus over/under odds for any line. Models trained on 108,000 player-games beat the season average on all four stats in games they never saw, and their over/under picks are right 59–68% of the time."
 category: web
 status: Live demo
 role: Solo rebuild (first version built on a team of four)

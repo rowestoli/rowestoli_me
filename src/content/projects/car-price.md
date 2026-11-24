@@ -1,6 +1,7 @@
 ---
 title: Used car price estimator
 summary: A used-car price model trained on 166,000 real Craigslist listings, with a calibrated price range and a breakdown of what moves the number.
+tldr: "A used-car price estimator trained on 166,000 cleaned Craigslist listings, giving a typical price, an honest 80% range and what drives the number. On cars it never saw, its typical miss is 12.3%, against 70% for the hand-written formula it replaced."
 category: ai
 status: Live demo
 role: Solo

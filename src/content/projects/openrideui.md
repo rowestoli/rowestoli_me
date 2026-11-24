@@ -1,6 +1,7 @@
 ---
 title: OpenRideUI
 summary: Compares ride-hail options side by side, sorted by price or arrival time, then opens the ride in the provider's own app.
+tldr: "One search compares every way across San Francisco, from Uber, Lyft and Waymo to bikes, scooters, walking and driving, then opens your pick in that company's app. With almost no rider data to learn from, I calibrated the price model to public studies of 94,000 quotes, cutting its miss on the average quote from 52% to 8%."
 category: app
 status: In development
 role: Solo — product, design and engineering

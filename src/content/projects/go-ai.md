@@ -1,6 +1,7 @@
 ---
 title: Go AI you can play
 summary: Play 5×5 Go against five agents, from random moves to Monte Carlo tree search guided by a neural network I trained, and watch the search think in real time.
+tldr: "I rebuilt my AI course's Go project so anyone can play it in a browser: 5×5 Go against five agents, up to Monte Carlo tree search guided by a neural network I trained. The final agent beats plain Monte Carlo search 7–3, and a live heat map shows where its 18,000 simulated games a second are going."
 category: ai
 status: Live demo
 role: Solo

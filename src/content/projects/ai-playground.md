@@ -1,6 +1,7 @@
 ---
 title: AI playground
 summary: Watch four searches race through a maze, A* weigh heuristics on a sliding puzzle, a SAT solver crack Sudoku, and an agent learn blackjack from scratch.
+tldr: "Four classic AI techniques you can watch work: searches racing through a maze, A* solving sliding puzzles, a SAT solver cracking Sudoku and an agent learning blackjack. A* finds the shortest path after checking 131 cells where breadth-first checks 603, and Q-learning nearly matches the exact blackjack strategy's 42.9% win rate."
 category: ai
 status: Live demo
 role: Solo

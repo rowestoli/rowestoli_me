@@ -1,6 +1,7 @@
 ---
 title: QuackLog
 summary: A hunting log, map and group chat for duck hunters. I designed, built and shipped it to the App Store on my own.
+tldr: "An iOS app for duck hunters with hunt logs, a private map of spots and real-time group chat, which I designed, built and shipped on my own with React Native and Supabase. Apple rejected the first submission on four points; I fixed all four, and it went live on the App Store in November 2026."
 category: app
 status: Live on the App Store
 role: Solo — product, design and engineering

@@ -32,7 +32,7 @@ const hasDemo = Boolean(d.links.demo || d.links.appStore);
     <header class="case__head rise">
       <p class="status" data-live={d.status.startsWith('Live') ? '' : undefined}>{d.status}</p>
       <h1 class="case__title" transition:name={`title-${project.id}`}>{d.title}</h1>
-      <p class="lede">{d.summary}</p>
+      <p class="tldr"><strong>TL;DR</strong> {d.tldr}</p>
       {d.origin && <p class="case__origin">{d.origin}</p>}
       <div class="case__links">
         {links.map((l) => (
@@ -77,6 +77,12 @@ const hasDemo = Boolean(d.links.demo || d.links.appStore);
 
   .case__head { display: grid; gap: 1.25rem; max-width: 48rem; }
   .case__title { font-size: clamp(2.4rem, 6vw, 4.5rem); line-height: 1.02; letter-spacing: -0.055em; }
+  .tldr {
+    max-width: 40em; margin: 0.25rem 0 0; padding: 1rem 1.25rem;
+    font-size: 1.05rem; line-height: 1.65; color: var(--ink);
+    background: var(--white); border: 1px solid var(--line); border-left: 3px solid var(--blaze); border-radius: 12px;
+  }
+  .tldr strong { margin-right: 0.4rem; color: var(--blaze); }
   .case__origin { font-size: var(--step--1); color: var(--reed); }
   .case__links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem; }
 

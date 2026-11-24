@@ -1,6 +1,7 @@
 ---
 title: Designing with users
 summary: Four projects from Interactive Design. I redesigned a local shooting club's website, helped design an AI writing assistant for a startup, studied a crowded dining hall dish line, and made dropdown menus work with a keyboard.
+tldr: "Four Interactive Design projects, each practicing a different part of the design loop: watching people, finding where they struggle, sketching, testing and building. The centerpiece is an accessible, responsive redesign of a shooting club's website that I researched, designed and coded myself."
 category: design
 status: Case study
 role: Designer and researcher

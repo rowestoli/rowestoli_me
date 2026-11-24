@@ -1,6 +1,7 @@
 ---
 title: Redline Viewer
 summary: An interactive map of the 1930s redlining maps for 202 U.S. cities. Explore every graded neighborhood and search 7,000+ surveyors' notes for the words they used to justify each grade.
+tldr: "An interactive map of the 1930s federal redlining grades for 202 U.S. cities, with full-text search across 7,470 surveyors' notes. I rebuilt it from a Java and Firebase class project into a serverless app that loads each city's data only when you need it and costs nothing to host."
 category: web
 status: Live demo
 role: Solo rebuild (first version built with a partner)

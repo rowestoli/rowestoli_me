@@ -1,6 +1,7 @@
 ---
 title: Photo lab
 summary: Color from 1910 glass plates, HDR from a handheld phone bracket, and seamless photo blending, all computed live in the browser.
+tldr: "Three computational photography techniques running live in the browser with no image libraries: coloring 1910 glass plates, merging handheld phone exposures into HDR, and seamless photo blending. Matching edges instead of brightness aligns all 10 plates, and the blend is solved again as you drag."
 category: web
 status: Live demo
 role: Solo

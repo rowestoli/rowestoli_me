@@ -7,6 +7,8 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     summary: z.string(),
+    /** Two or three sentences at the top of the project page: what it is and what it achieved. */
+    tldr: z.string(),
     // Used for the filter chips and the tag on each card
     category: z.enum(['app', 'ai', 'web', 'design']),
     status: z.string(),
